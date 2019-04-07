@@ -3,7 +3,8 @@ import asyncio
 import curses
 import random
 
-from curses_tools import draw_frame, read_controls, can_spaceship_move
+from curses_tools import draw_frame, read_controls
+from game_tools import can_spaceship_move, get_spaceship_animation_size
 
 
 TIC_TIMEOUT = 0.1
@@ -65,8 +66,10 @@ async def fire(canvas, start_row, start_column, rows_speed=-0.3, columns_speed=0
 async def animate_spaceship(canvas, start_row, start_column, spaceship_1, spaceship_2):
     while True:
         rows_direction, columns_directions, space_pressed = read_controls(canvas)
+        animation_row_size, animation_column_size = get_spaceship_animation_size(spaceship_1, spaceship_2)
 
-        if can_spaceship_move(canvas, start_row, start_column, rows_direction, columns_directions, spaceship_1, spaceship_2):
+        if can_spaceship_move(canvas, start_row, start_column, rows_direction, columns_directions, animation_row_size,
+                              animation_column_size):
             start_row += rows_direction
             start_column += columns_directions
 
@@ -98,7 +101,6 @@ def draw(canvas):
         spaceship_2 = spaceship_file_2.read()
 
     coroutines.append(fire(canvas, max_rows // 2, max_columns // 2))
-
     coroutines.append(animate_spaceship(canvas, max_rows // 2, max_columns // 2, spaceship_1, spaceship_2))
 
     for i in range(1, 101):

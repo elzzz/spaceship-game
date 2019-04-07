@@ -68,20 +68,3 @@ def get_frame_size(text):
     return rows, columns
 
 
-def can_spaceship_move(canvas, current_row, current_column, rows_direction, columns_directions, spaceship_1,
-                       spaceship_2):
-    """Check if spaceship can move. Returns bool"""
-    max_rows, max_columns = canvas.getmaxyx()
-  
-    spaceship_1_rows, spaceship_1_columns = get_frame_size(spaceship_1)
-    spaceship_2_rows, spaceship_2_columns = get_frame_size(spaceship_2)
-    spaceship_max_rows, spaceship_max_columns = max(spaceship_1_rows, spaceship_2_rows), max(spaceship_1_columns,
-                                                                                             spaceship_2_columns)
-
-    if 0 < current_row + rows_direction < max_rows and \
-            0 < current_row + rows_direction + spaceship_max_rows < max_rows and \
-            0 < current_column + columns_directions < max_columns and \
-            0 < current_column + columns_directions + spaceship_max_columns < max_columns:
-        return True
-  
-    return False
