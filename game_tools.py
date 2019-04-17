@@ -11,13 +11,6 @@ class Obstacle:
     columns_size: int = 1
     uid: str = None
 
-    def __init__(self, row, column, rows_size=1, columns_size=1, uid=None):
-        self.row = row
-        self.column = column
-        self.rows_size = rows_size
-        self.columns_size = columns_size
-        self.uid = uid
-
     @property
     def center_row(self):
         return self.row + self.rows_size / 2
@@ -87,28 +80,10 @@ def has_collision(obstacle_corner, obstacle_size, obj_corner, obj_size=(1, 1)):
     ])
 
 
-def can_spaceship_move(canvas, row, column, rows_offset, columns_offset, animation_row_size, animation_column_size):
-    """Check if spaceship can move. Returns bool"""
-    max_rows, max_columns = canvas.getmaxyx()
-
-    conditions = [
-        0 < row + rows_offset < max_rows,
-        0 < row + rows_offset + animation_row_size < max_rows,
-        0 < column + columns_offset < max_columns,
-        0 < column + columns_offset + animation_column_size < max_columns
-    ]
-
-    return all(conditions)
-
-
 def get_garbage_animation_size(*garbage_animations):
-    rows, columns = [], []
-    for garbage_animation in garbage_animations:
-        garbage_animation_rows, garbage_animation_columns = get_frame_size(garbage_animation)
-        rows.append(garbage_animation_rows)
-        columns.append(garbage_animation_columns)
-
-    return max(rows), max(columns)
+    animation_sizes = [get_frame_size(garbage_animation) for garbage_animation in garbage_animations]
+    rows_sizes, columns_sizes = zip(*animation_sizes)
+    return max(rows_sizes), max(columns_sizes)
 
 
 def get_garbage_delay_tics(year):
